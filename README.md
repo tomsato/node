@@ -1,18 +1,21 @@
 # tomsato / node
 
-//// 環境の準備
-
+## 環境の準備
+### create and ssh
+```
 mkdir tmhr_2015_01
 cd tmhr_2015_01/
 vagrant init chef/centos-6.5
 vim Vagrantfile
 vagrant up
 vagrant ssh
+```
 
-//// セットアップシェル
+## セットアップシェル
+### script
 // run.shに数時間時間がかかる
 // run.sh実行時にエラーが出るのはそういうもの
-
+```
 $ vim tmp.sh
 #!/bin/sh
 sudo yum -y install git
@@ -23,17 +26,23 @@ sudo yum -y install vim
 sudo npm update -g npm
 
 $ sudo sh tmp.sh
+```
 
-// close
+### close
+```
 vagrant suspend
 vagrant halt
+```
 
-//// MEANスタックセットアップ
+## MEANスタックセットアップ
 
-// node
+### node
+```
 $ sudo yum install nodejs npm --enablerepo=epel
+```
 
-// mongodb
+### mongodb
+```
 $ sudo vim /etc/yum.repos.d/mongodb.repo
 [mongodb]
 name=MongoDB Repository
@@ -43,11 +52,14 @@ enabled=1
 $ sudo yum install -y mongodb-org
 $ sudo service mongod start
 $ sudo service mongod status
-
-// gulp.js
+```
+### gulp.js
+```
 $ sudo npm install -g gulp
+```
 
-// npmが2.xでないとmean-cliでWARNINGが出る
+### mean-cli
+```
 $ sudo npm install -g mean-cli
 
 $ mean init testApp
@@ -55,12 +67,17 @@ $ cd testApp && npm install
 $ cd testApp && bower install
 $ cd testApp and then run..
 $ gulp
+```
 
-// Memory Store
+### Memory Store
+```
 $ npm install express-session
+```
 
-// redis
+### redis
+```
 $ sudo yum install redis
 $ npm install connect-redis
 $ npm install redis
+```
 
