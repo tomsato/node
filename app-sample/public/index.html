@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+<html lang="ja" ng-app="app">
+<meta charset="utf-8">
+<title>ユーザー管理</title>
+</head>
+<body>
+<div ng-view></div>
+<script src="//code.angularjs.org/1.3.15/angular.min.js"></script>
+<script src="//code.angularjs.org/1.3.15/angular-resource.min.js"></script>
+<script src="//code.angularjs.org/1.3.15/angular-route.min.js"></script>
+<script>
+  var app = angular.module('app', ['ngResource', 'ngRoute']);
+
+  // ルーティングの設定
+  app.config(function($routeProvider) {
+    $routeProvider.when('/users', {
+      templateUrl: 'list.html', controller: 'ListCtrl'
+    }).when('/users/:_id', {
+      templateUrl: 'edit.html', controller: 'EditCtrl'
+    }).otherwise({
+      redirectTo: '/users'
+    });
+  });
+
+  // app.jsで定義したREST APIを使うためのサービスUserを定義
+  app.factory('User', function($resource) {
+    return $resource('/api/users/:_id');
+  });
+
+  // 一覧画面のコントローラ
+  // User.query()でGet /api/usersが呼び出されコレクションusersの一覧が取得される
+  // 削除リンクが押された時はDELETE /api/users/:_idが呼び出されドキュメントを削除して画面を更新する
+  app.controller('ListCtrl', function($scope, $route, User) {
+    $scope.users = User.query();
+    $scope.delete = function(_id) {
+      User.delete({_id: _id}, function() {
+        $route.reload();
+      });
+    };
+  });
+
+  // 編集画面のコントローラ
+  // URLが/*/users/newの時は新規、その他の時は編集になる
+  // 登録ボタンが押された時はPOST /api/usersが呼び出され、ドキュメントの挿入・更新を行う
+  app.controller('EditCtrl', function($scope, $routeParams, $location, User) {
+    if ($routeParams._id != 'new') $scope.user = User.get({_id: $routeParams._id});
+    $scope.edit = function() {
+      User.save($scope.user, function() {
+        $location.url('/');
+      });
+    };
+  });
+</script>
+</body>
+</html>
