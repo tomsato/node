@@ -12,10 +12,8 @@ vagrant ssh
 ```
 
 ### セットアップシェル
-
-run.shに数時間時間がかかる
+run.shに数時間時間がかかる  
 run.sh実行時にエラーが出るのはそういうもの
-
 ```
 $ vim tmp.sh
 #!/bin/sh
